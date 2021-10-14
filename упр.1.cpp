@@ -38,9 +38,10 @@ public:
 
     DynArray& operator=(const DynArray& rhs) {
         if(this != &rhs) {
-            *_data = *(rhs._data);
+            _data = rhs._data;
             _lenght = rhs._lenght;
             _vectorIn = std::move(rhs._vectorIn);
+
         }
         return *this;
     }
@@ -69,7 +70,6 @@ std::ostream& operator<< (std::ostream & out, const std::vector<int>& right) {
 }
 
 std::ostream& operator<< (std::ostream & out, DynArray& right) {
-    out << "Наш DynArray:\n";
     out << "Array: [";
     for(size_t i = 0; i < right.getLenght(); ++i) {
         out << right[i] << " ";
@@ -99,12 +99,12 @@ int main() {
     std::cout << foo << std::endl;
     foo[0] = 3;
     DynArray foo2;
-    std::cout << "\nТак выглядит default DynArray:\n";
+    std::cout << "\nТак выглядит default DynArray - foo2:\n";
     std::cout << foo2 << std::endl;
-    
-
-
-
+    std::cout << "\nСделаем глубокое копирование!(foo2 = foo):\n";
+    foo2 = foo;
+    std::cout << "\nПолучили - foo2:\n";
+    std::cout << foo2 << std::endl;
 
     return 0;
     }
