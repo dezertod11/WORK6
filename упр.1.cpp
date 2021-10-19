@@ -13,12 +13,18 @@ private:
     std::vector<int> _vectorIn;
 public:
     DynArray(): _data (new int[0]), _lenght(0), _vectorIn(std::vector<int> (0)) {}
-    DynArray(size_t size, std::vector<int> vector) :
-            _lenght(size), _vectorIn(vector) {
-        _data = new int[_lenght];
+
+    DynArray(size_t size, std::vector<int> vector): _data(new int[_lenght]),
+    _lenght(size), _vectorIn(vector) {
         for (int i = 0; i < _lenght; ++i){
             _data[i] = i;
         }
+    }
+
+    DynArray(DynArray&& arr): _data(arr._data), _lenght(arr._lenght), _vectorIn(arr._vectorIn){
+        arr._data = 0;
+        arr._lenght = 0;
+        arr._vectorIn.clear();
     }
 
     int* getData() const {
@@ -28,13 +34,9 @@ public:
 
     std::vector<int> getVectorIn() const { return  _vectorIn;};
 
-    int& operator[] (size_t index) {
-        return _data[index];
-    }
+    int& operator[] (size_t index) { return _data[index]; }
 
-    int operator[] (size_t index) const {
-        return _data[index];
-    }
+    int operator[] (size_t index) const { return _data[index]; }
 
     DynArray& operator=(const DynArray& rhs) {
         if(this != &rhs) {
@@ -42,6 +44,18 @@ public:
             _lenght = rhs._lenght;
             _vectorIn = std::move(rhs._vectorIn);
 
+        }
+        return *this;
+    }
+
+    DynArray& operator=(DynArray&& rhs) {
+        if(this != &rhs) {
+            _data = rhs._data;
+            _lenght = rhs._lenght;
+            _vectorIn = std::move(rhs._vectorIn);
+            rhs._data = 0;
+            rhs._lenght = 0;
+            rhs._vectorIn.clear();
         }
         return *this;
     }
@@ -106,5 +120,28 @@ int main() {
     std::cout << "\nПолучили - foo2:\n";
     std::cout << foo2 << std::endl;
 
+    DynArray foo3;
+    std::cout << "\nСделаем перемещающее копирование!(foo3 = foo):\n";
+    foo3 = std::move(foo);
+    std::cout << "\nПолучили foo3: " << std::endl;
+    std::cout << foo3 << std::endl;
+    std::cout << "При этом теперь foo ограблен!:\n";
+    std::cout << foo << std::endl;
+
+    std::cout << "\nСделаем перемещение с помощью конструктора!(в foo4 из foo3):\n";
+    DynArray foo4(std::move(foo3));
+    std::cout << "\nПолучили foo4: " << std::endl;
+    std::cout << foo4 << std::endl;
+    std::cout << "При этом теперь foo3 ограблен!:\n";
+    std::cout << foo3 << std::endl;
     return 0;
-    }
+}
+
+
+
+
+
+
+
+
+
