@@ -15,8 +15,8 @@ namespace Rat
 
         void reduct();
         void set_num_and_den(int num, unsigned int den);
-        int get_num();
-        int get_den();
+        int get_num() const;
+        int get_den() const;
 
         friend std::ostream& operator<< (std::ostream& stream, const Rational& number);
         friend std::istream& operator>> (std::istream& stream, Rational& number);

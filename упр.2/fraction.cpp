@@ -25,11 +25,11 @@ namespace Rat
         numerate = num;
         denominator = den;
     }
-    int Rational::get_num()
+    int Rational::get_num() const
     {
         return numerate;
     }
-    int Rational::get_den()
+    int Rational::get_den() const
     {
         return denominator;
     }
